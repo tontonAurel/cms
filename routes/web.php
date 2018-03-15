@@ -14,7 +14,10 @@
 Route::get('/', function () {
     $posts = \App\Post::where('template_id', 1)->orderBy('date', 'desc')->paginate(1);
     if (request()->ajax()) {
-        return view('posts')->with(['posts' => $posts]);
+        return response()->json([
+            'html' => view('posts')->with(['posts' => $posts])->render(),
+            'nextUrl' => $posts->nextPageUrl()
+        ]);
     } else {
         return view('welcome')->with(['posts' => $posts]);
     }
