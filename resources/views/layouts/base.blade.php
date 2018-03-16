@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="{{ app()->getLocale() }}" class="h-100">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,30 +8,30 @@
     <link href="{{ mix('/css/app.css') }}" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Blog</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+<body class="h-100">
+<div id="app" class="d-none">
+    <b-navbar toggleable="md" type="dark" variant="info">
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url('/') }}">Accueil <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="{{ route('posts.create') }}">Articles <span class="sr-only">(current)</span></a>
-                </li
-            </ul>
-        </div>
-    </nav>
+        <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
+
+        <b-navbar-brand href="#">Blog</b-navbar-brand>
+
+        <b-collapse is-nav id="nav_collapse">
+
+            <b-navbar-nav>
+                <b-nav-item href="{{ url('/') }}">Accueil</b-nav-item>
+                <b-nav-item href="{{ route('posts.create') }}">Articles</b-nav-item>
+            </b-navbar-nav>
+
+        </b-collapse>
+    </b-navbar>
     <div class="container-fluid">
         @yield('content')
     </div>
-    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
-    <script src="{{ mix('/js/app.js') }}"></script>
-    @stack('scripts')
+</div>
+<div id="main-loader" class="loader d-flex align-items-center  justify-content-center d-flex w-100 h-100 "><i class="fas fa-5x fa-spinner fa-spin"></i></div>
+<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+<script src="{{ mix('/js/app.js') }}"></script>
+@stack('scripts')
 </body>
 </html>

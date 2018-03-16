@@ -20,6 +20,10 @@ class Post extends Model implements HasMedia, HasMediaConversions
         'date'
     ];
 
+    protected $appends = [
+        'medias', 'thumb', 'big'
+    ];
+
     public function collections()
     {
         return $this->belongsToMany(Collection::class, 'post_collection', 'owner_id', 'collection_id');
@@ -27,8 +31,28 @@ class Post extends Model implements HasMedia, HasMediaConversions
 
     public function getMediasAttribute()
     {
-        return $this->collections->first()->postsForOwner($this->id);
+        if ($this->collections->isNotEmpty()) {
+            return $this->collections->first()->postsForOwner($this->id);
+        }
+        return collect([]);
     }
+
+    public function getThumbAttribute()
+    {
+        if ($this->getMedia()->isNotEmpty()) {
+            return asset($this->getMedia()->first()->getUrl('thumb'));
+        }
+        return null;
+    }
+
+    public function getBigAttribute()
+    {
+        if ($this->getMedia()->isNotEmpty()) {
+            return asset($this->getMedia()->first()->getUrl('big'));
+        }
+        return null;
+    }
+
 
     public function registerMediaConversions(Media $media = null)
     {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Post;
 use App\Collection;
+use DB;
 
 class PostController extends Controller
 {
@@ -36,22 +37,30 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-
-        $article    = Post::create($request->all());
-        $collection = Collection::create([
-            'name' => 'medias',
-        ]);
-
-        foreach ($request->photos as $file) {
-            $post = Post::create([
-                'title'       => '',
-                'description' => '',
-                'template_id' => 2
+        try {
+            DB::beginTransaction();
+            $article    = Post::create($request->all());
+            $collection = Collection::create([
+                'name' => 'medias',
             ]);
-            $article->collections()->attach($collection->id, ['post_id' => $post->id]);
-            $post->addMedia($file)->toMediaCollection();
+
+            if (is_array($request->photos)) {
+                foreach ($request->photos as $file) {
+                    $post = Post::create([
+                        'title'       => '',
+                        'description' => '',
+                        'template_id' => 2
+                    ]);
+                    $article->collections()->attach($collection->id, ['post_id' => $post->id]);
+                    $post->addMedia($file)->toMediaCollection();
+                }
+            }
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
         }
         return redirect()->route('posts.edit', ["id" => $article->id]);
+
     }
 
     /**
@@ -86,29 +95,31 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $article              = Post::find($id);
-        $article->title       = request()->input('title');
-        $article->description = request()->input('description');
-        $article->save();
-        $collection = $article->collections->first();
-        if (is_array($request->photos)) {
-            foreach ($request->photos as $file) {
-                $post = Post::create([
-                    'title'       => '',
-                    'description' => '',
-                    'template_id' => 2
-                ]);
-                $article->collections()->attach($collection->id, ['post_id' => $post->id]);
-                $post->addMedia($file)->toMediaCollection();
+        $article = Post::find($id);
+        DB::transaction(function () use ($request, $article) {
+            $article->title       = request()->input('title');
+            $article->description = request()->input('description');
+            $article->save();
+            $collection = $article->collections->first();
+            if (is_array($request->photos)) {
+                foreach ($request->photos as $file) {
+                    $post = Post::create([
+                        'title'       => '',
+                        'description' => '',
+                        'template_id' => 2
+                    ]);
+                    $article->collections()->attach($collection->id, ['post_id' => $post->id]);
+                    $post->addMedia($file)->toMediaCollection();
+                }
             }
-        }
 
-        foreach (request()->medias as $id => $media) {
-            $model              = Post::find($id);
-            $model->title       = $media['title'];
-            $model->description = $media['description'];
-            $model->save();
-        }
+            foreach (request()->medias as $id => $media) {
+                $model              = Post::find($id);
+                $model->title       = $media['title'];
+                $model->description = $media['description'];
+                $model->save();
+            }
+        });
         return redirect()->route('posts.edit', ['id' => $article->id]);
     }
 
