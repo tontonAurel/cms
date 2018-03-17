@@ -37,6 +37,10 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'title' => 'required',
+            'date'  => 'required'
+        ]);
         try {
             DB::beginTransaction();
             $article    = Post::create($request->all());
