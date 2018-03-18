@@ -29,10 +29,10 @@ Route::get('/{year?}/{month?}/{day?}', function () {
         $posts->where(\DB::raw('DATE_FORMAT(date, "%d")'), request()->day);
     }
     if (request()->ajax()) {
-        return $posts->paginate(1);;
+        return $posts->paginate(20);;
     } else {
         return view('welcome')
             ->with(['dates' => $all])
-            ->with(['posts' => $posts->paginate(1)]);
+            ->with(['posts' => $posts->paginate(20)]);
     }
 })->name('welcome');
