@@ -11,6 +11,9 @@ const fontawesome = require('@fortawesome/fontawesome')
 
 fontawesome.library.add(require('@fortawesome/fontawesome-free-regular/faCalendarAlt'))
 fontawesome.library.add(require('@fortawesome/fontawesome-free-solid/faSpinner'))
+fontawesome.library.add(require('@fortawesome/fontawesome-free-solid/faEdit'))
+fontawesome.library.add(require('@fortawesome/fontawesome-free-solid/faPlus'))
+fontawesome.library.add(require('@fortawesome/fontawesome-free-solid/faTrash'))
 
 window.Vue = require('vue');
 

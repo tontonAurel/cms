@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
 use Illuminate\Http\Request;
 use App\Post;
 use App\Collection;
@@ -16,7 +17,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        return view('posts.index')->with('posts', Post::where('template_id', 1)->orderBy('date', 'desc')->get());
     }
 
     /**
@@ -37,33 +38,48 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required',
-            'date'  => 'required'
+        $validator = Validator::make($request->all(), [
+            'title'       => 'required',
+            'date'        => 'required',
+            'template_id' => 'required'
         ]);
-        try {
-            DB::beginTransaction();
-            $article    = Post::create($request->all());
-            $collection = Collection::create([
-                'name' => 'medias',
-            ]);
+        if (!$validator->fails()) {
+            try {
+                DB::beginTransaction();
+                $article    = Post::create($request->all());
+                $collection = Collection::firstOrCreate([
+                    'name' => 'medias',
+                ], [
+                    'name' => 'medias',
+                ]);
 
-            if (is_array($request->photos)) {
-                foreach ($request->photos as $file) {
-                    $post = Post::create([
-                        'title'       => '',
-                        'description' => '',
-                        'template_id' => 2
-                    ]);
-                    $article->collections()->attach($collection->id, ['post_id' => $post->id]);
-                    $post->addMedia($file)->toMediaCollection();
+                if (is_array($request->photos)) {
+                    foreach ($request->photos as $file) {
+                        $post = Post::create([
+                            'title'       => '',
+                            'description' => '',
+                            'template_id' => 2
+                        ]);
+                        $article->collections()->attach($collection->id, ['post_id' => $post->id]);
+                        $post->addMedia($file)->toMediaCollection();
+                    }
                 }
+                DB::commit();
+                return redirect()->route('posts.edit', ["id" => $article->id])
+                    ->with('status', 'Post créé');
+            } catch (\Exception $e) {
+                DB::rollback();
+                $validator->errors()->add('general', 'Une erreur est survenue');
+                return redirect()->route('posts.create')
+                    ->withErrors($validator)
+                    ->withInput();
             }
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollback();
+        } else {
+            return redirect()->route('posts.create')
+                ->withErrors($validator)
+                ->withInput();
         }
-        return redirect()->route('posts.edit', ["id" => $article->id]);
+
 
     }
 
@@ -86,7 +102,7 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        $post = Post::find($id);
+        $post = Post::findOrFail($id);
         return view('posts.edit')->with('post', $post);
     }
 
@@ -99,10 +115,16 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'title'          => 'required',
+            'date'           => 'required',
+            'template_id'    => 'required',
+        ]);
         $article = Post::find($id);
         DB::transaction(function () use ($request, $article) {
             $article->title       = request()->input('title');
             $article->description = request()->input('description');
+            $article->template_id = request()->input('template_id');
             $article->save();
             $collection = $article->collections->first();
             if (is_array($request->photos)) {
@@ -117,14 +139,21 @@ class PostController extends Controller
                 }
             }
 
-            foreach (request()->medias as $id => $media) {
-                $model              = Post::find($id);
-                $model->title       = $media['title'];
-                $model->description = $media['description'];
-                $model->save();
+            if (is_array($request->medias)) {
+                foreach (request()->medias as $media) {
+                    $model              = Post::find($media['id']);
+                    if (isset($media['destroy']) && (int) $media['destroy']) {
+                        $model->delete();
+                    } else {
+                        $model->title       = $media['title'];
+                        $model->description = $media['description'];
+                        $model->save();
+                    }
+                }
             }
         });
-        return redirect()->route('posts.edit', ['id' => $article->id]);
+        return redirect()->route('posts.index')
+            ->with('status', 'Post mis à jour');;
     }
 
     /**
@@ -135,6 +164,8 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post = Post::findOrFail($id);
+        $post->delete();
+        return redirect()->route("posts.index");
     }
 }

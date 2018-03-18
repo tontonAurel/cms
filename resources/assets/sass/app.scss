@@ -10,10 +10,15 @@
 @import '~bootstrap-datepicker/dist/css/bootstrap-datepicker';
 @import '~bootstrap-vue/dist/bootstrap-vue.css';
 
+@import '~quill/dist/quill.core.css';
+@import '~quill/dist/quill.snow.css';
+@import '~quill/dist/quill.bubble.css';
+
 .navbar-laravel {
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
+
 
 .card-columns {
   @include media-breakpoint-only(xs) {
@@ -28,4 +33,9 @@
   @include media-breakpoint-only(lg) {
     column-count: 4;
   }
+}
+
+.ql-editor {
+  height: 100px;
+  background-color: #fff;
 }

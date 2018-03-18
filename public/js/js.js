@@ -68,17 +68,8 @@
 /***/ 401:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(402);
+(function webpackMissingModule() { throw new Error("Cannot find module \"/Users/aurel/Projects/perso/blog/resources/assets/js\""); }());
 
-
-/***/ }),
-
-/***/ 402:
-/***/ (function(module, exports) {
-
-var app = new Vue({
-    el: '#welcome'
-});
 
 /***/ })
 

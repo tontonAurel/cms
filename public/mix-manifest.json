@@ -1,6 +1,7 @@
 {
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
+    "/js/post-index.js": "/js/post-index.js",
     "/js/post-create.js": "/js/post-create.js",
     "/js/welcome.js": "/js/welcome.js",
     "/js/post-edit.js": "/js/post-edit.js"

@@ -29,6 +29,17 @@
         </b-collapse>
     </b-navbar>
     <div class="container-fluid">
+        @if (session('status'))
+            <div class="container mt-2">
+                <b-alert :show="5"
+                         dismissible
+                         variant="success"
+                >
+                    <p class="mb-0">{{ session('status') }}</p>
+                </b-alert>
+            </div>
+
+        @endif
         @yield('content')
     </div>
 </div>
