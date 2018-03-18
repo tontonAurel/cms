@@ -1,8 +1,13 @@
 <template>
     <div class="container">
-        <b-jumbotron :header="post.title" :lead="post.description" class="jumbotron m-2" v-for="post in posts"
+        <b-jumbotron :header="post.title" class="jumbotron m-2" v-for="post in posts"
                      :key="post.id">
+            <template slot="lead" lead-tag="div">
+                <div class="mt-2 mb-2">Le {{ format(post.date) }}</div>
+                <div v-html="post.description"></div>
+            </template>
             <hr class="my-4">
+
             <b-card-group columns>
                 <b-card v-for="(media, idx) in post.medias" :title="media.title" :key="media.id"
                         :no-body="!media.title && !media.description"
@@ -39,6 +44,8 @@
 </template>
 
 <script>
+    import moment from 'moment'
+    import 'moment/locale/fr.js'
     export default {
         props: ['data'],
         data: function () {
@@ -50,6 +57,9 @@
                 slide: 0,
                 posts: []
             }
+        },
+        created () {
+            moment.locale('fr')
         },
         mounted() {
             this.nextUrl = this.data.next_page_url
@@ -87,6 +97,9 @@
             },
             next() {
                 this.slide = Math.min(this.slide + 1, this.galleryMedias.length - 1)
+            },
+            format (date) {
+                return moment(date).format('LL')
             }
         }
     }

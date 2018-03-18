@@ -65,6 +65,21 @@
 /************************************************************************/
 /******/ ({
 
+/***/ 167:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = ({
+    mounted: function mounted() {
+        document.querySelector('#main-loader').remove();
+        document.querySelector('body').classList.remove("h-100");
+        document.querySelector('html').classList.remove("h-100");
+        this.$el.classList.remove('d-none');
+    }
+});
+
+/***/ }),
+
 /***/ 401:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -74,10 +89,21 @@ module.exports = __webpack_require__(402);
 /***/ }),
 
 /***/ 402:
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_preloader_js__ = __webpack_require__(167);
+
 
 var app = new Vue({
-    el: '#welcome'
+    el: '#welcome',
+    mixins: [__WEBPACK_IMPORTED_MODULE_0__mixins_preloader_js__["a" /* default */]],
+    data: function data() {
+        return {
+            showCollapse: {}
+        };
+    }
 });
 
 /***/ })

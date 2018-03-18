@@ -39,3 +39,21 @@
   height: 100px;
   background-color: #fff;
 }
+
+.lead p {
+  margin-bottom: 0;
+}
+
+.aside li {
+  padding-left: 0;
+  a.nav-link {
+    padding: 0;
+  }
+  & + div {
+    padding-left: 0.25rem;
+    div {
+      padding-left: 0.50rem;
+    }
+  }
+
+}

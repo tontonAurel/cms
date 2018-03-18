@@ -7,6 +7,8 @@
 
 require('./bootstrap');
 
+
+
 const fontawesome = require('@fortawesome/fontawesome')
 
 fontawesome.library.add(require('@fortawesome/fontawesome-free-regular/faCalendarAlt'))
@@ -14,7 +16,8 @@ fontawesome.library.add(require('@fortawesome/fontawesome-free-solid/faSpinner')
 fontawesome.library.add(require('@fortawesome/fontawesome-free-solid/faEdit'))
 fontawesome.library.add(require('@fortawesome/fontawesome-free-solid/faPlus'))
 fontawesome.library.add(require('@fortawesome/fontawesome-free-solid/faTrash'))
-
+fontawesome.library.add(require('@fortawesome/fontawesome-free-solid/faCaretDown'))
+fontawesome.library.add(require('@fortawesome/fontawesome-free-solid/faCaretRight'))
 window.Vue = require('vue');
 
 Vue.use(require('vue-touch'));

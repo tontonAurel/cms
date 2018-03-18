@@ -16,7 +16,7 @@
         <b-form @submit="onSubmit" enctype="multipart/form-data" method="post" action="{{ route('posts.store') }}"
                 class="mt-2">
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-lg-8">
                     @csrf
                     <input type="hidden" name="template_id" value="1">
                     <b-form-group id="titleGroup"
@@ -87,7 +87,7 @@
                         <b-form-file v-model="post.files" placeholder="Photos" multiple name="photos[]"></b-form-file>
                     </b-form-group>
                 </div>
-                <div class="col-md-4">
+                <div class="col-lg-4">
                     <div class="card mt-3" no-header no-footer>
                         <b-button variant="primary" type="submit" :disabled="loading">
                             Ajouter

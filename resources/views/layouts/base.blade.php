@@ -28,27 +28,37 @@
 
         </b-collapse>
     </b-navbar>
-    <div class="container-fluid">
-        @if (session('status'))
-            <div class="container mt-2">
-                <b-alert :show="5"
-                         dismissible
-                         variant="success"
-                >
-                    <p class="mb-0">{{ session('status') }}</p>
-                </b-alert>
-            </div>
+    <div class="d-flex">
+        <div class="container-fluid">
+            @if (session('status'))
+                <div class="container mt-2">
+                    <b-alert :show="5"
+                             dismissible
+                             variant="success"
+                    >
+                        <p class="mb-0">{{ session('status') }}</p>
+                    </b-alert>
+                </div>
 
-        @endif
-        @yield('content')
+            @endif
+            @yield('content')
+
+        </div>
+        @yield('aside')
     </div>
+
 </div>
-<div id="main-loader" class="loader d-flex align-items-center  justify-content-center d-flex w-100 h-100 "><i class="fas fa-5x fa-spinner fa-spin"></i></div>
+<div id="main-loader" class="loader d-flex align-items-center  justify-content-center d-flex w-100 h-100 "><i
+            class="fas fa-5x fa-spinner fa-spin"></i></div>
 <script src="{{ mix('/js/app.js') }}"></script>
 <script>
-    window.errors = @json(collect($errors->getBag('default'))->map(function($error) {
+    window.errors = @json(collect($errors->getBag('default'))
+    ->
+    map(function ($error) {
         return $error[0];
-    }));
+    })
+    )
+    ;
     window.old = @json(old());
 </script>
 @stack('scripts')

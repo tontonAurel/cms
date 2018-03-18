@@ -13152,3 +13152,23 @@ a.text-dark:focus {
   background-color: #fff;
 }
 
+.lead p {
+  margin-bottom: 0;
+}
+
+.aside li {
+  padding-left: 0;
+}
+
+.aside li a.nav-link {
+  padding: 0;
+}
+
+.aside li + div {
+  padding-left: 0.25rem;
+}
+
+.aside li + div div {
+  padding-left: 0.50rem;
+}
+

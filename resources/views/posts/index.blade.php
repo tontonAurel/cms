@@ -5,7 +5,7 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-lg-10">
                 <b-alert show variant="info" v-if="!posts.length" class="mt-5">Pas de post</b-alert>
                 <b-table striped hover :items="posts" :fields="fields" caption-top v-else>
                     <template slot="table-caption">
@@ -25,7 +25,7 @@
                     </template>
                 </b-table>
             </div>
-            <div class="col-md-4">
+            <div class="col-lg-2">
                 <div class="card mt-5" no-header no-footer>
                     <b-btn href="{{ route('posts.create') }}" variant="success"><i class="fas fa-plus"></i> Nouveau
                     </b-btn>
