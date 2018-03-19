@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\PostCollection;
 use Validator;
 use Illuminate\Http\Request;
 use App\Post;
@@ -127,6 +128,13 @@ class PostController extends Controller
             $article->template_id = request()->input('template_id');
             $article->save();
             $collection = $article->collections->first();
+            if (!$collection) {
+                $collection = Collection::firstOrCreate([
+                    'name' => 'medias',
+                ], [
+                    'name' => 'medias',
+                ]);
+            }
             if (is_array($request->photos)) {
                 foreach ($request->photos as $file) {
                     $post = Post::create([
@@ -143,6 +151,12 @@ class PostController extends Controller
                 foreach (request()->medias as $media) {
                     $model              = Post::find($media['id']);
                     if (isset($media['destroy']) && (int) $media['destroy']) {
+                        $postCollection = PostCollection::where('owner_id', $article->id)
+                            ->where('post_id', $media['id'])
+                            ->where('collection_id', $collection->id)
+                            ->first();
+                        $postCollection->deleted_at = \Carbon\Carbon::now();
+                        $postCollection->save();
                         $model->delete();
                     } else {
                         $model->title       = $media['title'];

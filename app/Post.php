@@ -7,10 +7,14 @@ use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\Media;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
+use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Post extends Model implements HasMedia, HasMediaConversions
+class Post extends Model implements HasMedia, HasMediaConversions, Auditable
 {
-    use HasMediaTrait;
+    use HasMediaTrait, \OwenIt\Auditing\Auditable;
+    use SoftDeletes;
+
 
     protected $fillable = [
         'title', 'description', 'template_id', 'date'
@@ -26,7 +30,9 @@ class Post extends Model implements HasMedia, HasMediaConversions
 
     public function collections()
     {
-        return $this->belongsToMany(Collection::class, 'post_collection', 'owner_id', 'collection_id');
+        return $this->belongsToMany(Collection::class, 'post_collection', 'owner_id', 'collection_id')
+            ->using(PostCollection::class)
+            ->withTimestamps();
     }
 
     public function getMediasAttribute()

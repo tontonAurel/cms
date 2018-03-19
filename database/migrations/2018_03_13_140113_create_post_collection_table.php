@@ -19,9 +19,11 @@ class CreatePostCollectionTable extends Migration
             $table->integer('collection_id')->unsigned();
             $table->integer('post_id')->unsigned();
 
-            $table->foreign('owner_id')->references('id')->on('posts')->onDelete('cascade');
-            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');;
+            $table->foreign('owner_id')->references('id')->on('posts'); //->onDelete('cascade');
+            $table->foreign('post_id')->references('id')->on('posts'); //->onDelete('cascade');;
             $table->foreign('collection_id')->references('id')->on('collections');
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
