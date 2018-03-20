@@ -1,2 +1,2 @@
 # cms
-CMS Built with Laravel, Vue and Bootstrap Vue.js
+CMS for pictures viewing, built with Laravel, Vue and Bootstrap Vue.js
