@@ -182,4 +182,10 @@ class PostController extends Controller
         $post->delete();
         return redirect()->route("posts.index");
     }
+
+    public function history($id)
+    {
+        $post = Post::findOrFail($id);
+        return view('posts.history')->with('post', $post);
+    }
 }

@@ -15,6 +15,8 @@ Route::resources([
     'posts' => 'PostController'
 ]);
 
+Route::get('/posts/{id}/history', 'PostController@history')->name('posts.history');
+
 Route::get('/{year?}/{month?}/{day?}', function () {
 
     $posts = \App\Post::where('template_id', 1)->orderBy('date', 'desc');

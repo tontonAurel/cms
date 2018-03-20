@@ -19,4 +19,15 @@ class PostCollection extends Pivot
     {
         return 'updated_at';
     }
+
+    public function getPostWithTrashedAttribute()
+    {
+        return Post::withTrashed()->find($this->post_id);
+    }
+
+    public function getPostAttribute()
+    {
+        return Post::find($this->post_id);
+    }
+
 }

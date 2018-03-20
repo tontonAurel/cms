@@ -135,6 +135,9 @@
                             Enregistrer
                             <i class="fas fa-x fa-spinner fa-spin" v-if="loading"></i>
                         </b-button>
+                        <b-button class="mt-2" variant="info" href="{{ route('posts.history', ['id' => $post->id]) }}">
+                            Log
+                        </b-button>
                     </div>
                 </div>
             </div>

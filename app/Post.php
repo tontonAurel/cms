@@ -34,6 +34,13 @@ class Post extends Model implements HasMedia, HasMediaConversions, Auditable
             ->using(PostCollection::class)
             ->withTimestamps();
     }
+    public function collectionsWithTrashed()
+    {
+        return $this->belongsToMany(Collection::class, 'post_collection', 'owner_id', 'collection_id')
+            ->using(PostCollection::class)
+            ->withPivot('post_id', 'deleted_at')
+            ->withTimestamps();
+    }
 
     public function getMediasAttribute()
     {
